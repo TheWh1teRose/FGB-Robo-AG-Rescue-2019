@@ -8,6 +8,6 @@ Platform: Python on Pi
 
 Alles Wissenswerte in der Wiki
 
-Ordneraufbau:
-firmware/ Root-ordner mit Install-script
-firmware/rescue2019/ Hier kommt der gesamte Code und auch das Main programm
+Ordneraufbau:</br>
+firmware/ Root-ordner mit Install-script</br>
+firmware/rescue2019/ Hier kommt der gesamte Code und auch das Main programm</br>
