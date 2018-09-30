@@ -1,0 +1,1 @@
+pscp -scp -pw robots1234 -r rescue2019 pi@%1:RoboAG2019/firmware
