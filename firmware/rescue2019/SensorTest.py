@@ -1,7 +1,7 @@
 import Sensors
 from time import sleep
 
-sensorPins = {"temper": [(2,3)], "ultrasonic": [5]}
+sensorPins = {"temper": [(0,1)], "ultrasonic": [6]}
 
 sensors = Sensors.Sensors(sensorPins)
 
@@ -16,5 +16,9 @@ while True:
     print("Ultraschall")
     for pin in sensorPins["ultrasonic"]:
         print("Pin: " + str(sensors.getUltrasonicDist(pin)))
+    print("Compass")
+    print(sensors.getCompassHeading())
+    print("LaserDist")
+    print(sensors.getLaserDist())
     print("\n")
     sleep(1)
