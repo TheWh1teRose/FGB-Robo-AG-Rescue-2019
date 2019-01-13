@@ -1,13 +1,17 @@
 import grovepi as gp
 from time import sleep
 import numpy as np
+import CompassMeasurement
 import TemperaturMeasurement
+import LaserMeasurment
 
 
 class Sensors:
     """Class that contains all nessesary Functions to get the sonsordata from the Robot"""
 
     temperMeas = []
+    compassMeas = None
+    laserMeas = None
 
     def __init__(self, pins):
         """Set up the Sonsors and create sensor objects
@@ -15,9 +19,16 @@ class Sensors:
         Parameters:
             pins (dict): A dictionary that contains the pin information. Format like: ['temper': [(1,2), (3,4)], 'ultrasonic': [5,6,7], 'other': [1,2,3,4]]
         """
+        #set up temperatur sensors
         temperPins = pins['temper']
         for pin1, pin2 in temperPins:
             self.temperMeas.append(TemperaturMeasurement.TemperaturMeasurement([pin1, pin2]))
+
+        #set up Compass
+        self.compassMeas = CompassMeasurement.CompassMeasurement()
+
+        #set up Laser Measurment
+        self.laserMeas = LaserMeasurment.LaserMeasurment()
 
     def getSurrTemper(self, pin):
         """Get the surrounding temperatur from an infared temperatur sensorself.
@@ -53,4 +64,28 @@ class Sensors:
             int: The distance the sensor sees
         """
         dist = gp.ultrasonicRead(pin)
+        return dist
+
+    def getCompassHeading(self):
+        """Get the degrees the compass is heading
+
+        Parameters:
+            None
+
+        Returns:
+            float: The degrees the compass is heading
+        """
+        headingDegrees = self.compassMeas.getHeadingDegrees()
+        return headingDegrees
+
+    def getLaserDist(self):
+        """Get the distance from the laser
+
+        Parameters:
+            None
+
+        Returns:
+            float: Distance in mm
+        """
+        dist = self.laserMeas.getDistance()
         return dist
