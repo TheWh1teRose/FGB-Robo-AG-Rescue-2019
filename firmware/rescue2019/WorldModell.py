@@ -80,3 +80,10 @@ class WorldModell:
             #return obst
 
     def isHeatViction(self, direction):
+        heatThreshold = 10
+        if direction=="R":
+            heatDiff = self.sensorValues["tempSurR"] - self.sensorValues["tempObjR"]
+            return heatDiff > heatThreshold
+        elif direction=="L":
+            heatDiff = self.sensorValues["tempSurL"] - self.sensorValues["tempObjL"]
+            return heatDiff > heatThreshold
