@@ -11,12 +11,12 @@ def move(d,s):      #d=directions(1,2); s=speed(255-0)
     bus.write_i2c_block_data(i2c_address, i2c_cmd, listToSend) #Liste wird übertragen
     print(listToSend)
 
-def turn(d):
-    listToSend = [d]
+def turn(d,s):
+    listToSend = [d, s]
     print(listToSend)
 
 def stop():
-    listToSend = []
+    listToSend = [0]
     #listToSend = [1]  #Order (1 == Motoren stopp)
     bus.write_i2c_block_data(i2c_address, i2c_cmd, listToSend) #Liste wird übertragen
     print(listToSend)
