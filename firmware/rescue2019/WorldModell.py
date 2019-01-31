@@ -15,10 +15,10 @@ class WorldModell:
     "distF": np.zeros(saveLenght),
     "distR": np.zeros(saveLenght),
     "distL": np.zeros(saveLenght),
-    "temSurR": np.zeros(saveLenght),
-    "temObjR": np.zeros(saveLenght),
-    "temSurL": np.zeros(saveLenght),
-    "temObjL": np.zeros(saveLenght),
+    "tempSurR": np.zeros(saveLenght),
+    "tempObjR": np.zeros(saveLenght),
+    "tempSurL": np.zeros(saveLenght),
+    "tempObjL": np.zeros(saveLenght),
     "comp": np.zeros(saveLenght)
     }
     def __init__(self):
@@ -52,9 +52,15 @@ class WorldModell:
         self.sensorValues["tempSurR"] = tempSurR
         #object temp
         tempObjR = np.roll(self.sensorValues["tempObjR"], 1)
-        tempObjRVal = self.sensors.getObjTemper(1)
+        tempObjRVal = self.sensors.getObjTemper(0)
         tempObjR[0] = tempObjRVal
         self.sensorValues["tempObjR"] = tempObjR
+
+        #update compass values
+        comp = np.roll(self.sensorValues["comp"], 1)
+        compVal = self.sensors.getCompassHeading()
+        comp[0] = compVal
+        self.sensorValues["comp"] = comp
 
     def getRawDist(self, direction):
         if direction=="F":
@@ -79,11 +85,11 @@ class WorldModell:
             #obst = True if self.sensorValues["distL"][0] < thresholdUS else False
             #return obst
 
-    def isHeatViction(self, direction):
-        heatThreshold = 10
+    def isHeatVictim(self, direction):
+        heatThreshold = 2
         if direction=="R":
-            heatDiff = self.sensorValues["tempSurR"] - self.sensorValues["tempObjR"]
+            heatDiff = abs(self.sensorValues["tempSurR"][0] - self.sensorValues["tempObjR"][0])
             return heatDiff > heatThreshold
         elif direction=="L":
-            heatDiff = self.sensorValues["tempSurL"] - self.sensorValues["tempObjL"]
+            heatDiff = abs(self.sensorValues["tempSurL"][0] - self.sensorValues["tempObjL"][0])
             return heatDiff > heatThreshold
