@@ -1,6 +1,7 @@
 import Sensors
 import numpy as np
 import sys, os
+import logging
 
 ## TODO:
 ## method: get raw distance -> norm values on cm, return -1 on to large numbers
@@ -61,6 +62,9 @@ class WorldModell:
         compVal = self.sensors.getCompassHeading()
         comp[0] = compVal
         self.sensorValues["comp"] = comp
+
+        #logging sensor values
+        logging.info("Sensor data\n Dists(L,F,R): %s; %s; %s\n Temp(SL,OL, SR, OR): %s; %s;; %s; %s\n Comp: %s", distFVal, distRVal, 0, tempSurRVal, tempObjRVal, 0, 0, compVal)
 
     def getRawDist(self, direction):
         if direction=="F":
