@@ -4,6 +4,7 @@ import numpy as np
 import CompassMeasurement
 import TemperaturMeasurement
 import LaserMeasurment
+import ColorMeasurement
 
 
 class Sensors:
@@ -12,6 +13,7 @@ class Sensors:
     temperMeas = []
     compassMeas = None
     laserMeas = None
+    colorMeas = None
 
     def __init__(self, pins):
         """Set up the Sonsors and create sensor objects
@@ -29,6 +31,9 @@ class Sensors:
 
         #set up Laser Measurment
         self.laserMeas = LaserMeasurment.LaserMeasurment()
+
+        #set up color Measurement
+        self.colorMeas = ColorMeasurement.ColorMeasurement()
 
     def getSurrTemper(self, pin):
         """Get the surrounding temperatur from an infared temperatur sensorself.
@@ -78,7 +83,7 @@ class Sensors:
         headingDegrees = self.compassMeas.getHeadingDegrees()
         return headingDegrees
 
-    def getLaserDist(self):
+    def getLaserDist(self, direction):
         """Get the distance from the laser
 
         Parameters:
@@ -87,5 +92,16 @@ class Sensors:
         Returns:
             float: Distance in mm
         """
-        dist = self.laserMeas.getDistance()
+        dist = self.laserMeas.getDistance(direction)
         return dist
+
+    def getColorIntensity(self):
+        """Get the intensity of the Red color
+
+        Parameters:
+            None
+
+        Returns:
+            int: Intensity
+        """
+        return self.colorMeas.getRed()

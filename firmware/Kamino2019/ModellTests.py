@@ -6,6 +6,6 @@ def start():
 
     while True:
         world.updateSensors()
-        print(world.isHeatVictim("R"))
+        print(world.isBlack())
         print("")
         time.sleep(1)
