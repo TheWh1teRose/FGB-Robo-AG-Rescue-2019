@@ -9,10 +9,10 @@ float r;
 
 
 //Ort:PWM (blau),Direction (gelb),FG (grün)
-//VL: 5,2,3    ✓ (rot)
-//VR: 6,11,4   ✓ (blau)
-//HL: 9,12,7   ✓ (grün)
-//HR: 10,13,8  ✓ (schwarz)
+//VR: 5,2,3    ✓ (rot)
+//VL: 6,11,4   ✓ (blau)
+//HR: 9,12,7   ✓ (grün)
+//HL: 10,13,8  ✓ (schwarz)
 
 void setup() {
   // put your setup code here, to run once:
@@ -33,31 +33,23 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("-----Void Loop begonnen-----");
+  
   Wire.onReceive(ReadI2C);
-  /*moveF();
-  delay(3000);
-  stopM();
-  delay(1000);
-  moveB();
-  delay(3000);
-  stopM();
-  delay(5000);*/
-  delay(50);
-  Serial.println("#####Void Loop beendet#####");
+  //ReadI2C();
+  //delay(50);
 }  
   
 
 void moveF() {
   Serial.println("***moveF***");
-  analogWrite(5, s);
-  analogWrite(9, s);
-  analogWrite(6, s);
+  analogWrite(5, s-11-4);
+  analogWrite(9, s-4);
+  analogWrite(6 , s-11);
   analogWrite(10, s);
-  digitalWrite(2, LOW);
-  digitalWrite(12, LOW);
-  digitalWrite(11, HIGH);
-  digitalWrite(13, HIGH);
+  digitalWrite(2, HIGH);
+  digitalWrite(12, HIGH);
+  digitalWrite(11, LOW);
+  digitalWrite(13, LOW);
 }
 
 void moveB() {
@@ -66,10 +58,10 @@ void moveB() {
   analogWrite(9, s);
   analogWrite(6, s);
   analogWrite(10, s);
-  digitalWrite(2, HIGH);  
-  digitalWrite(12, HIGH);
-  digitalWrite(11, LOW);
-  digitalWrite(13, LOW);
+  digitalWrite(2, LOW);  
+  digitalWrite(12, LOW);
+  digitalWrite(11, HIGH);
+  digitalWrite(13, HIGH);
 }
 
 void stopM() {
@@ -78,14 +70,19 @@ void stopM() {
   analogWrite(9, 255);
   analogWrite(6, 255);
   analogWrite(10, 255);
+  digitalWrite(2, LOW);  
+  digitalWrite(12, LOW);
+  digitalWrite(11, HIGH);
+  digitalWrite(13, HIGH);
 }
+
 
 void moveR() {
   FoBoLoR();
   delay(100);
-  for(int j = 0;j<8;j++)  {
-    i += pulseIn(3, HIGH, 500000); //SIGNAL OUTPUT PIN 9 with  white line,cycle = 2*i,1s = 1000000us，Signal cycle pulse number：27*2
-  }
+    for(int j = 0;j<8;j++)  {
+    i += pulseIn(7, HIGH, 500000); //SIGNAL OUTPUT PIN 9 with  white line,cycle = 2*i,1s = 1000000us，Signal cycle pulse number：27*2
+    }
   i = i >> 3;
   Serial.print(111111 / i); //speed   r/min  (60*1000000/(45*6*2*i))
   Serial.println("  r/min");
@@ -100,8 +97,13 @@ void moveR() {
   Serial.println(" r/s");
   Serial.print("t = ");
   Serial.println(t);
-  delay(t - 175);
-  analogWrite(11, 255);
+  Serial.print("t real = ");
+  Serial.println(t - 175);
+  delay(t - 100);
+  analogWrite(5, 255);
+  analogWrite(9, 255);
+  analogWrite(6, 255);
+  analogWrite(10, 255);
   i = 0;
 }
 
@@ -121,7 +123,14 @@ void FoBoLoR() {
 }
 
 void turnL() {
-  
+  analogWrite(5, s-11-4-15);
+  analogWrite(9, s-4-15);
+  analogWrite(6 , s-11-25);
+  analogWrite(10, s-25);
+  digitalWrite(2, HIGH);
+  digitalWrite(12, HIGH);
+  digitalWrite(11, HIGH);
+  digitalWrite(13, HIGH);
 }
 
 void turnR() {
@@ -131,21 +140,15 @@ void turnR() {
 void ReadI2C() {
   Serial.println("-----Start I2C-----");
   int AnzahlBytes = Wire.available();
-  Serial.print("AB = ");
-  Serial.print(AnzahlBytes);
   if (AnzahlBytes == 2) {
+    cmd = Wire.read();     //cmd
+    int _ = Wire.read();
     stopM();
   }
   else if (AnzahlBytes == 3) {
     cmd = Wire.read();     //cmd
     d = Wire.read();            //Liste wird ausgelesen
     s = Wire.read();
-    Serial.print("cmd = ");
-    Serial.println(cmd);
-    Serial.print("d = ");
-    Serial.println(d);
-    Serial.print("s = ");
-    Serial.println(s);
     FoBoLoR();
   }
   else if (AnzahlBytes == 4) {
